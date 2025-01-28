@@ -1108,7 +1108,7 @@ impl<F: Field> Expression<F> {
         }
     }
 
-    fn write_identifier<W: std::io::Write>(&self, writer: &mut W) -> std::io::Result<()> {
+    fn write_identifier<W: halo2curves::io::Write>(&self, writer: &mut W) -> halo2curves::io::Result<()> {
         match self {
             Expression::Constant(scalar) => write!(writer, "{scalar:?}"),
             Expression::Selector(selector) => write!(writer, "selector[{}]", selector.0),
@@ -1166,9 +1166,9 @@ impl<F: Field> Expression<F> {
     /// do the same calculation (but the expressions don't need to be exactly equal
     /// in how they are composed e.g. `1 + 2` and `2 + 1` can have the same identifier).
     pub fn identifier(&self) -> String {
-        let mut cursor = std::io::Cursor::new(Vec::new());
-        self.write_identifier(&mut cursor).unwrap();
-        String::from_utf8(cursor.into_inner()).unwrap()
+        let mut v = Vec::new();
+        self.write_identifier(&mut v).unwrap();
+        String::from_utf8(v).unwrap()
     }
 
     /// Compute the degree of this polynomial
@@ -2465,6 +2465,11 @@ impl<F: Field> ConstraintSystem<F> {
     /// Returns constants
     pub fn constants(&self) -> &Vec<Column<Fixed>> {
         &self.constants
+    }
+
+    /// Returns number of advice queries
+    pub fn num_advice_queries(&self) -> &Vec<usize> {
+        &self.num_advice_queries
     }
 }
 

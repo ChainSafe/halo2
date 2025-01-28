@@ -26,8 +26,8 @@ these byte streams happens via the transcript:
   (at verifying time).
 
 Crucially, implementations of `TranscriptWrite` are responsible for simultaneously writing
-to some `std::io::Write` buffer at the same time that they hash things into the transcript,
-and similarly for `TranscriptRead`/`std::io::Read`.
+to some `halo2curves::io::Write` buffer at the same time that they hash things into the transcript,
+and similarly for `TranscriptRead`/`halo2curves::io::Read`.
 
 As a bonus, treating proofs as opaque byte streams ensures that verification accounts for
 the cost of deserialization, which isn't negligible due to point compression.

@@ -41,7 +41,7 @@ pub use prover::*;
 pub use verifier::*;
 
 use evaluation::Evaluator;
-use std::io;
+use halo2curves::io;
 
 /// This is a verifying key which allows for the verification of proofs for a
 /// particular circuit.
@@ -121,32 +121,19 @@ where
         let mut version_byte = [0u8; 1];
         reader.read_exact(&mut version_byte)?;
         if VERSION != version_byte[0] {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidData,
-                "unexpected version byte",
-            ));
+            return Err("unexpected version byte");
         }
 
         let mut k = [0u8; 1];
         reader.read_exact(&mut k)?;
         let k = u8::from_le_bytes(k);
         if k as u32 > C::Scalar::S {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidData,
-                format!(
-                    "circuit size value (k): {} exceeds maxium: {}",
-                    k,
-                    C::Scalar::S
-                ),
-            ));
+            return Err("circuit size value (k) exceeds maxium");
         }
         let mut compress_selectors = [0u8; 1];
         reader.read_exact(&mut compress_selectors)?;
         if compress_selectors[0] != 0 && compress_selectors[0] != 1 {
-            return Err(io::Error::new(
-                io::ErrorKind::InvalidData,
-                "unexpected compress_selectors not boolean",
-            ));
+            return Err("unexpected compress_selectors not boolean");
         }
         let compress_selectors = compress_selectors[0] == 1;
         let (domain, cs, _) = keygen::create_domain::<C, ConcreteCircuit>(
@@ -316,6 +303,11 @@ impl<C: CurveAffine> VerifyingKey<C> {
     /// Returns representative of this `VerifyingKey` in transcripts
     pub fn transcript_repr(&self) -> C::Scalar {
         self.transcript_repr
+    }
+
+    /// Returns selectors
+    pub fn selectors(&self) -> &[Vec<bool>] {
+        &self.selectors
     }
 }
 

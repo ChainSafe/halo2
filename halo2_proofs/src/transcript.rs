@@ -8,7 +8,7 @@ use std::convert::TryInto;
 
 use halo2curves::{Coordinates, CurveAffine};
 
-use std::io::{self, Read, Write};
+use halo2curves::io::{self, Read, Write};
 use std::marker::PhantomData;
 
 /// Prefix to a prover's message soliciting a challenge
@@ -157,9 +157,8 @@ where
     fn read_point(&mut self) -> io::Result<C> {
         let mut compressed = C::Repr::default();
         self.reader.read_exact(compressed.as_mut())?;
-        let point: C = Option::from(C::from_bytes(&compressed)).ok_or_else(|| {
-            io::Error::new(io::ErrorKind::Other, "invalid point encoding in proof")
-        })?;
+        let point: C = Option::from(C::from_bytes(&compressed))
+            .ok_or_else(|| "invalid point encoding in proof")?;
         self.common_point(point)?;
 
         Ok(point)
@@ -168,12 +167,8 @@ where
     fn read_scalar(&mut self) -> io::Result<C::Scalar> {
         let mut data = <C::Scalar as PrimeField>::Repr::default();
         self.reader.read_exact(data.as_mut())?;
-        let scalar: C::Scalar = Option::from(C::Scalar::from_repr(data)).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::Other,
-                "invalid field element encoding in proof",
-            )
-        })?;
+        let scalar: C::Scalar = Option::from(C::Scalar::from_repr(data))
+            .ok_or_else(|| "invalid field element encoding in proof")?;
         self.common_scalar(scalar)?;
 
         Ok(scalar)
@@ -188,9 +183,8 @@ where
     fn read_point(&mut self) -> io::Result<C> {
         let mut compressed = C::Repr::default();
         self.reader.read_exact(compressed.as_mut())?;
-        let point: C = Option::from(C::from_bytes(&compressed)).ok_or_else(|| {
-            io::Error::new(io::ErrorKind::Other, "invalid point encoding in proof")
-        })?;
+        let point: C = Option::from(C::from_bytes(&compressed))
+            .ok_or_else(|| "invalid point encoding in proof")?;
         self.common_point(point)?;
 
         Ok(point)
@@ -199,12 +193,8 @@ where
     fn read_scalar(&mut self) -> io::Result<C::Scalar> {
         let mut data = <C::Scalar as PrimeField>::Repr::default();
         self.reader.read_exact(data.as_mut())?;
-        let scalar: C::Scalar = Option::from(C::Scalar::from_repr(data)).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::Other,
-                "invalid field element encoding in proof",
-            )
-        })?;
+        let scalar: C::Scalar = Option::from(C::Scalar::from_repr(data))
+            .ok_or_else(|| "invalid field element encoding in proof")?;
         self.common_scalar(scalar)?;
 
         Ok(scalar)
@@ -224,12 +214,8 @@ where
 
     fn common_point(&mut self, point: C) -> io::Result<()> {
         self.state.update(&[BLAKE2B_PREFIX_POINT]);
-        let coords: Coordinates<C> = Option::from(point.coordinates()).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::Other,
-                "cannot write points at infinity to the transcript",
-            )
-        })?;
+        let coords: Coordinates<C> = Option::from(point.coordinates())
+            .ok_or_else(|| "cannot write points at infinity to the transcript")?;
         self.state.update(coords.x().to_repr().as_ref());
         self.state.update(coords.y().to_repr().as_ref());
 
@@ -268,12 +254,8 @@ where
 
     fn common_point(&mut self, point: C) -> io::Result<()> {
         self.state.update([KECCAK256_PREFIX_POINT]);
-        let coords: Coordinates<C> = Option::from(point.coordinates()).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::Other,
-                "cannot write points at infinity to the transcript",
-            )
-        })?;
+        let coords: Coordinates<C> = Option::from(point.coordinates())
+            .ok_or_else(|| "cannot write points at infinity to the transcript")?;
         self.state.update(coords.x().to_repr().as_ref());
         self.state.update(coords.y().to_repr().as_ref());
 
@@ -398,12 +380,8 @@ where
 
     fn common_point(&mut self, point: C) -> io::Result<()> {
         self.state.update(&[BLAKE2B_PREFIX_POINT]);
-        let coords: Coordinates<C> = Option::from(point.coordinates()).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::Other,
-                "cannot write points at infinity to the transcript",
-            )
-        })?;
+        let coords: Coordinates<C> = Option::from(point.coordinates())
+            .ok_or_else(|| "cannot write points at infinity to the transcript")?;
         self.state.update(coords.x().to_repr().as_ref());
         self.state.update(coords.y().to_repr().as_ref());
 
@@ -442,12 +420,8 @@ where
 
     fn common_point(&mut self, point: C) -> io::Result<()> {
         self.state.update([KECCAK256_PREFIX_POINT]);
-        let coords: Coordinates<C> = Option::from(point.coordinates()).ok_or_else(|| {
-            io::Error::new(
-                io::ErrorKind::Other,
-                "cannot write points at infinity to the transcript",
-            )
-        })?;
+        let coords: Coordinates<C> = Option::from(point.coordinates())
+            .ok_or_else(|| "cannot write points at infinity to the transcript")?;
         self.state.update(coords.x().to_repr().as_ref());
         self.state.update(coords.y().to_repr().as_ref());
 

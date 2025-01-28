@@ -12,7 +12,7 @@ use rand_core::{OsRng, RngCore};
 use std::fmt::Debug;
 use std::marker::PhantomData;
 
-use std::io;
+use halo2curves::io;
 
 use super::msm::MSMKZG;
 
@@ -154,6 +154,11 @@ where
     }
 
     /// Returns gernerator on G2
+    pub fn g(&self) -> &[E::G1Affine] {
+        &self.g
+    }
+
+    /// Returns gernerator on G2
     pub fn g2(&self) -> E::G2Affine {
         self.g2
     }
@@ -215,20 +220,12 @@ where
                 let g = load_points_from_file_parallelly(reader)?;
                 let g: Vec<<E as Engine>::G1Affine> = g
                     .iter()
-                    .map(|point| {
-                        point.ok_or_else(|| {
-                            io::Error::new(io::ErrorKind::Other, "invalid point encoding")
-                        })
-                    })
+                    .map(|point| point.ok_or_else(|| "invalid point encoding"))
                     .collect::<Result<_, _>>()?;
                 let g_lagrange = load_points_from_file_parallelly(reader)?;
                 let g_lagrange: Vec<<E as Engine>::G1Affine> = g_lagrange
                     .iter()
-                    .map(|point| {
-                        point.ok_or_else(|| {
-                            io::Error::new(io::ErrorKind::Other, "invalid point encoding")
-                        })
-                    })
+                    .map(|point| point.ok_or_else(|| "invalid point encoding"))
                     .collect::<Result<_, _>>()?;
                 (g, g_lagrange)
             }

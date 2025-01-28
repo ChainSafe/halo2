@@ -11,7 +11,7 @@ use crate::poly::{commitment::Blind, Coeff, Polynomial};
 use crate::transcript::{EncodedChallenge, TranscriptWrite};
 
 use group::Curve;
-use std::io::{self};
+use halo2curves::io::{self};
 
 /// Create a polynomial commitment opening proof for the polynomial defined
 /// by the coefficients `px`, the blinding factor `blind` used for the

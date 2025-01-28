@@ -18,7 +18,7 @@ mod verifier;
 pub use prover::create_proof;
 pub use verifier::verify_proof;
 
-use std::io;
+use halo2curves::io;
 
 /// Public parameters for IPA commitment scheme
 #[derive(Debug, Clone)]

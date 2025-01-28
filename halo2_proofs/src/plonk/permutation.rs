@@ -17,7 +17,7 @@ pub(crate) mod verifier;
 
 pub use keygen::Assembly;
 
-use std::io;
+use halo2curves::io;
 
 /// A permutation argument.
 #[derive(Debug, Clone)]

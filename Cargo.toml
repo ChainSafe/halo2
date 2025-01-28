@@ -3,3 +3,6 @@ members = [
     "halo2",
     "halo2_proofs",
 ]
+
+[patch.crates-io]
+halo2curves = { path = "../halo2curves-nostd" }

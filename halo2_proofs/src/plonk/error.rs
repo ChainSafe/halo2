@@ -1,6 +1,6 @@
 use std::error;
 use std::fmt;
-use std::io;
+use halo2curves::io;
 
 use super::TableColumn;
 use super::{Any, Column};
@@ -84,14 +84,14 @@ impl fmt::Display for Error {
     }
 }
 
-impl error::Error for Error {
-    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
-        match self {
-            Error::Transcript(e) => Some(e),
-            _ => None,
-        }
-    }
-}
+// impl error::Error for Error {
+//     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+//         match self {
+//             Error::Transcript(e) => Some(e),
+//             _ => None,
+//         }
+//     }
+// }
 
 /// This is an error that could occur during table synthesis.
 #[derive(Debug)]

@@ -10,7 +10,7 @@ use crate::transcript::{EncodedChallenge, TranscriptWrite};
 use ff::Field;
 use group::Curve;
 use rand_core::RngCore;
-use std::io;
+use halo2curves::io;
 use std::marker::PhantomData;
 
 /// IPA multi-open prover

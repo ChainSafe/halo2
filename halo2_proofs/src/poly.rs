@@ -9,7 +9,7 @@ use crate::SerdeFormat;
 
 use group::ff::{BatchInvert, Field};
 use std::fmt::Debug;
-use std::io;
+use halo2curves::io;
 use std::marker::PhantomData;
 use std::ops::{Add, Deref, DerefMut, Index, IndexMut, Mul, RangeFrom, RangeFull, Sub};
 

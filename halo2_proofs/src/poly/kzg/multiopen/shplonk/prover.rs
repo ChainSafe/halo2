@@ -19,7 +19,7 @@ use halo2curves::pairing::Engine;
 use halo2curves::CurveExt;
 use rand_core::RngCore;
 use std::fmt::Debug;
-use std::io;
+use halo2curves::io;
 use std::marker::PhantomData;
 use std::ops::MulAssign;
 

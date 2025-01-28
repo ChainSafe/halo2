@@ -1,7 +1,7 @@
 use crate::poly::Polynomial;
 use ff::PrimeField;
+use halo2curves::io;
 use halo2curves::{serde::SerdeObject, CurveAffine};
-use std::io;
 
 /// This enum specifies how various types are serialized and deserialized.
 #[derive(Clone, Copy, Debug)]
@@ -26,8 +26,7 @@ pub(crate) trait CurveRead: CurveAffine {
     fn read<R: io::Read>(reader: &mut R) -> io::Result<Self> {
         let mut compressed = Self::Repr::default();
         reader.read_exact(compressed.as_mut())?;
-        Option::from(Self::from_bytes(&compressed))
-            .ok_or_else(|| io::Error::new(io::ErrorKind::Other, "Invalid point encoding in proof"))
+        Option::from(Self::from_bytes(&compressed)).ok_or_else(|| "Invalid point encoding in proof")
     }
 }
 impl<C: CurveAffine> CurveRead for C {}
@@ -78,9 +77,8 @@ pub trait SerdePrimeField: PrimeField + SerdeObject {
             SerdeFormat::Processed => {
                 let mut compressed = Self::Repr::default();
                 reader.read_exact(compressed.as_mut())?;
-                Option::from(Self::from_repr(compressed)).ok_or_else(|| {
-                    io::Error::new(io::ErrorKind::Other, "Invalid prime field point encoding")
-                })
+                Option::from(Self::from_repr(compressed))
+                    .ok_or_else(|| "Invalid prime field point encoding")
             }
             SerdeFormat::RawBytes => <Self as SerdeObject>::read_raw(reader),
             SerdeFormat::RawBytesUnchecked => Ok(<Self as SerdeObject>::read_raw_unchecked(reader)),

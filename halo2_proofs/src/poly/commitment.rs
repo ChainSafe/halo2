@@ -10,9 +10,10 @@ use halo2curves::CurveAffine;
 use rand_core::RngCore;
 use std::{
     fmt::Debug,
-    io::{self},
     ops::{Add, AddAssign, Mul, MulAssign},
 };
+
+use halo2curves::io;
 
 /// Defines components of a commitment scheme.
 pub trait CommitmentScheme {
