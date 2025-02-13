@@ -56,9 +56,9 @@ rand_core = { version = "0.6", default-features = false }
 tracing = "0.1"
 blake2b_simd = { version = "1", default-features = false }
 sha3 = "0.9.1"
-rand_chacha = "0.3"
+rand_chacha = { version = "0.3", default-features = false }
 serde = { version = "1", optional = true, features = ["derive"] }
-serde_derive = { version = "1", optional = true}
+serde_derive = { version = "1", optional = true }
 rayon = "1.8"
 
 # Developer tooling dependencies
@@ -73,7 +73,9 @@ assert_matches = "1.5"
 criterion = "0.3"
 gumdrop = "0.8"
 proptest = "1"
-rand_core = { version = "0.6", default-features = false, features = ["getrandom"] }
+rand_core = { version = "0.6", default-features = false, features = [
+    "getrandom",
+] }
 serde_json = "1"
 
 [target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dev-dependencies]
